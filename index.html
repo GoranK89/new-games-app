@@ -11,11 +11,14 @@
     <p>Create folders for icons</p>
     <input type="text" id="folder-name" placeholder="Enter game code" />
     <button id="create-folder">Create folder</button>
-    <p>
-      Limitations: The game description file generates the game title and
-      content from the game code, therefore ANY special characters will be
-      missing. It will only consist of letters.
-    </p>
+    <div>
+      <h2>Limitations</h2>
+      <ul>
+        <li>Symlinks not generated yet</li>
+        <li>Title & description generated from game code</li>
+        <li>Icons still have to be manually downloaded and copied</li>
+      </ul>
+    </div>
   </body>
   <script src="./renderer.js"></script>
 </html>
