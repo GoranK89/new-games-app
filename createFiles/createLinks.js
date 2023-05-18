@@ -14,14 +14,9 @@ const generateGameLink = (gameCode) => {
   }
 };
 
-const generateSymlink = (gameCode) => {
+const generateSymlink = (gameCode, bindTo) => {
   const gameProvider = gameCode.split("_")[0];
-  const gameLink = generateGameLink(gameCode);
-  const modifiedGameLink = gameLink.replace("games[]=", "").split("_");
-  modifiedGameLink.pop();
-  const bindSymlinkTo = modifiedGameLink.join("_");
-
-  const baseSymlink = `symlinks[]=${gameProvider}/${gameCode},${bindSymlinkTo}\n`;
+  const baseSymlink = `symlinks[]=${gameProvider}/${gameCode},${bindTo}\n`;
 
   if (specialGameProviders.includes(gameProvider)) {
     const exceptionCode = gameProvider.slice(0, -1);
@@ -33,24 +28,44 @@ const generateSymlink = (gameCode) => {
 
 const createLink = (path, gameCode) => {
   const gameLink = generateGameLink(gameCode);
-  const symlink = generateSymlink(gameCode);
 
-  fs.appendFile(`${path}/links.txt`, gameLink, (err) => {
-    if (err) throw err;
-  });
+  if (fs.existsSync(`${path}/Icons.txt`)) {
+    fs.readFile(`${path}/Icons.txt`, "utf8", (err, data) => {
+      let existingLinks = data.trim().split("\n");
+
+      const modifiedGameLink = gameLink.replace("games[]=", "").split("_");
+      modifiedGameLink.pop();
+      const baseGame = modifiedGameLink.join("_"); //GP/GP_GAME
+
+      const gameCodeNoVersion = gameCode.split("_");
+      gameCodeNoVersion.pop();
+      const baseGameCode = gameCodeNoVersion.join("_");
+
+      const foundBindTo = existingLinks.find((item) => item.includes(baseGame));
+      const bindTo = foundBindTo?.replace("games[]=", "");
+
+      const symlink = generateSymlink(gameCode, bindTo);
+
+      if (
+        !existingLinks.some((link) => link.includes(gameLink)) &&
+        !existingLinks.some((link) => link.includes(baseGameCode))
+      ) {
+        fs.appendFile(`${path}/Icons.txt`, gameLink, (err) => {
+          if (err) throw err;
+        });
+      }
+
+      if (existingLinks.some((link) => link.includes(baseGame))) {
+        fs.appendFile(`${path}/Icons.txt`, symlink, (err) => {
+          if (err) throw err;
+        });
+      }
+    });
+  } else {
+    fs.appendFile(`${path}/Icons.txt`, gameLink, (err) => {
+      if (err) throw err;
+    });
+  }
 };
-
-// if (fs.existsSync(`${path}/links.txt`)) {
-//   fs.readFile(`${path}/links.txt`, "utf8", (err, data) => {
-//     let existingLinks = data.trim().split("\n");
-
-//     // TODO: check if the gameLink already exists
-//     if (existingLinks.some((link) => link.includes(gameCode))) {
-//       console.log("LAKSD already exists");
-//     }
-//   });
-
-//   return;
-// }
 
 module.exports = createLink;

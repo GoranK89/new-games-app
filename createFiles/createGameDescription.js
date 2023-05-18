@@ -5,7 +5,7 @@ const createGameDescription = (path, gameCode) => {
 
   const txtContent = `type=SLOT\ntitle=${gameTitle}\ncontent=${gameTitle}`;
 
-  fs.writeFile(`${path}/nameThis.txt`, txtContent, (err) => {
+  fs.writeFile(`${path}/game_en.ini`, txtContent, (err) => {
     if (err) throw err;
   });
 };

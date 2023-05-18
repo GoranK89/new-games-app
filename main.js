@@ -24,6 +24,7 @@ function prepareNewUpload(event, folderName) {
 
   // Inside subfolders
   createLaunchFolder(`${subPath}/launch`);
+  createLaunchFolder(`${subPath}/original`);
   createGameDescription(subPath, folderName);
 }
 
