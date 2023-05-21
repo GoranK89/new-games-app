@@ -2,6 +2,35 @@ const fs = require("fs");
 
 const specialGameProviders = ["MGSD", "MGSM", "NETEM", "NETED"];
 
+// works on simple game codes (names and versions) not on "no buy feature" game codes yet
+const extractBaseGame = (gameLink) => {
+  const modifiedGameLink = gameLink.replace("games[]=", "").split("_");
+  const lastItem = Number(modifiedGameLink[modifiedGameLink.length - 1]);
+
+  if (!isNaN(lastItem)) {
+    modifiedGameLink.pop();
+  }
+  const baseGame = modifiedGameLink.join("_"); //GP/GP_GAME
+  console.log(
+    `${gameLink} converted to: ${baseGame}, checking if converted value exists in Icons.txt`
+  );
+  return baseGame;
+};
+
+const removeGameVersion = (gameCode) => {
+  const gameCodeTransform = gameCode.split("_");
+  const lastItem = Number(gameCodeTransform[gameCodeTransform.length - 1]);
+
+  if (!isNaN(lastItem)) {
+    gameCodeTransform.pop();
+  }
+  const noVersionGameCode = gameCodeTransform.join("_");
+  console.log(
+    `${gameCode} version number ${lastItem} removed, symlink will be bound to ${noVersionGameCode}`
+  );
+  return noVersionGameCode;
+};
+
 const createGameLink = (gameCode) => {
   const gameProvider = gameCode.split("_")[0];
   const baseGameLink = `games[]=${gameProvider}/${gameCode}\n`;
@@ -12,19 +41,6 @@ const createGameLink = (gameCode) => {
   } else {
     return baseGameLink;
   }
-};
-
-// works on simple game codes (names and versions) not on "no buy feature" game codes yet
-const extractBaseGame = (gameLink) => {
-  const modifiedGameLink = gameLink.replace("games[]=", "").split("_");
-  const lastItem = Number(modifiedGameLink[modifiedGameLink.length - 1]);
-
-  if (!isNaN(lastItem)) {
-    modifiedGameLink.pop();
-  }
-
-  const baseGame = modifiedGameLink.join("_"); //GP/GP_GAME
-  return baseGame;
 };
 
 const createSymlink = (gameCode, existingLinks) => {
@@ -43,22 +59,14 @@ const createSymlink = (gameCode, existingLinks) => {
   }
 };
 
-const removeGameCodeVersion = (gameCode) => {
-  const gameCodeTransform = gameCode.split("_");
-  gameCodeTransform.pop();
-  const noVersionGameCode = gameCodeTransform.join("_");
-  return noVersionGameCode;
-};
-
 const createLink = (path, gameCode) => {
   const gameLink = createGameLink(gameCode);
+  const baseGame = extractBaseGame(gameLink);
+  const noVersionGameCode = removeGameVersion(gameCode);
 
   if (fs.existsSync(`${path}/Icons.txt`)) {
     fs.readFile(`${path}/Icons.txt`, "utf8", (err, data) => {
       let existingLinks = data.trim().split("\n");
-
-      const baseGame = extractBaseGame(gameLink);
-      const noVersionGameCode = removeGameCodeVersion(gameCode);
 
       const symlink = createSymlink(gameCode, existingLinks);
 
