@@ -8,16 +8,56 @@
   </head>
   <body>
     <h1>New Games app</h1>
-    <p>Create folders for icons</p>
-    <input type="text" id="folder-name" placeholder="Enter game code" />
-    <button id="create-folder">Create folder</button>
+    <section class="section-create-folders">
+      <h2>Create folders for icons</h2>
+      <textarea
+        id="input-folder-names"
+        rows="5"
+        cols="30"
+        type="text"
+        placeholder="Enter game codes, one code per line"
+      ></textarea>
+      <button id="btn-create-folder">Create folders</button>
+    </section>
     <div>
-      <h2>Limitations</h2>
+      <h2>How it currently works</h2>
+      <ol>
+        <li>Codes get stored in JSON, duplicates get cleaned up</li>
+        <li>
+          Create folders -> creates folders, based on stored game codes in JSON
+        </li>
+        <li>
+          Create game/sym links -> creates Icons.txt file based on stored game
+          codes
+        </li>
+      </ol>
+      <p>
+        This seperate/modular way still allows just creating folders, later
+        game/sym link generation should be toggled based on inputs or JSON codes
+      </p>
+      <h2>TODO</h2>
       <ul>
-        <li>Title & description generated from game code</li>
+        <li>Title & description generation must be improved</li>
         <li>Icons still have to be manually downloaded and copied</li>
         <li>Tested on game codes: GP_GAME_NAME or GP_GAME_NAME_90</li>
+        <li>
+          special game providers like netent and microgaming not working yet
+        </li>
       </ul>
+    </div>
+    <div>
+      <select>
+        <option value="PP">Pragmatic Play</option>
+        <option value="PP">Evolution</option>
+      </select>
+      <textarea
+        id="input-game-names"
+        rows="5"
+        cols="30"
+        type="text"
+        placeholder="Enter game names, one name per line"
+      ></textarea>
+      <button>Generate game Codes</button>
     </div>
   </body>
   <script src="./renderer.js"></script>

@@ -1,40 +1,53 @@
-const { app, BrowserWindow, ipcMain } = require("electron");
-const electronReload = require("electron-reload");
-const path = require("path");
-const fs = require("fs");
+const { app, BrowserWindow, ipcMain } = require('electron');
+const electronReload = require('electron-reload');
+const path = require('path');
+const fs = require('fs');
 
-const creatNewUploadFolder = require("./createFolders/createNewUploadFolder");
-const createGameFolder = require("./createFolders/createGameFolder");
-const createLaunchFolder = require("./createFolders/createLaunchFolder");
+const creatNewUploadFolder = require('./createFolders/createNewUploadFolder');
+const createGameFolder = require('./createFolders/createGameFolders');
+const createLink = require('./createFiles/createLinks');
 
-const createGameDescription = require("./createFiles/createGameDescription");
-const createLink = require("./createFiles/createLinks");
+const desktopPath = app.getPath('desktop');
+const mainPath = `${desktopPath}/Icon Upload`;
 
-function prepareNewUpload(event, folderName) {
-  const desktopPath = app.getPath("desktop");
-  const mainPath = `${desktopPath}/Icon Upload`;
-  const subPath = `${mainPath}/${folderName}`;
-
+function prepareNewUpload(event, gameCodes) {
   // Main folder
   creatNewUploadFolder(desktopPath);
-  createLink(mainPath, folderName);
 
   // Inside folder
-  createGameFolder(subPath, folderName);
+  createGameFolder(mainPath, gameCodes);
+  createLink(mainPath);
+}
 
-  // Inside subfolders
-  createLaunchFolder(`${subPath}/launch`);
-  createLaunchFolder(`${subPath}/original`);
-  createGameDescription(subPath, folderName);
+function storeGameCodes(event, gameCodes) {
+  const gameCodesPath = `${mainPath}/gameCodes.json`;
+
+  let jsonData = [];
+
+  if (fs.existsSync(gameCodesPath)) {
+    const fileData = fs.readFileSync(gameCodesPath, 'utf8');
+    jsonData = JSON.parse(fileData);
+  }
+
+  gameCodes.forEach((gameCode) => {
+    if (!jsonData.includes(gameCode)) {
+      jsonData.push(gameCode);
+    }
+  });
+
+  const gameCodesJSON = JSON.stringify(jsonData, null, 2);
+
+  fs.writeFileSync(gameCodesPath, gameCodesJSON);
 }
 
 // maybe it's safer to use game codes instead of names
 function generateGameCode(gameProvider, gameName) {
-  const sanitized = gameName.replace(/[^a-zA-Z ]/g, "").toUpperCase();
-  const gameCode = sanitized.replace(/\s+/g, "_");
+  const sanitized = gameName.replace(/[^a-zA-Z ]/g, '').toUpperCase();
+  const gameCode = sanitized.replace(/\s+/g, '_');
   const finalGameCode = `${gameProvider}_${gameCode}`;
 
   console.log(finalGameCode);
+  console.log('gameName', gameName);
 }
 
 const createWindow = () => {
@@ -42,26 +55,27 @@ const createWindow = () => {
     width: 800,
     height: 600,
     webPreferences: {
-      preload: path.join(__dirname, "preload.js"),
+      preload: path.join(__dirname, 'preload.js'),
     },
   });
-  win.loadFile("index.html");
+  win.loadFile('index.html');
 };
 
 app.whenReady().then(() => {
-  ipcMain.on("create-folder", prepareNewUpload);
+  ipcMain.on('create-folders', prepareNewUpload);
+  ipcMain.handle('store-game-codes', storeGameCodes);
   createWindow();
 
-  app.on("activate", () => {
+  app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });
 
   //NOTE: Development only!
-  require("electron-reload")(__dirname, {
+  require('electron-reload')(__dirname, {
     electron: require(`${__dirname}/node_modules/electron`),
   });
 });
 
-app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") app.quit();
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') app.quit();
 });

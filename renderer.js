@@ -1,7 +1,13 @@
-const btnCreateFolder = document.getElementById("create-folder");
-const folderNameInput = document.getElementById("folder-name");
+const btnCreateFolder = document.getElementById('btn-create-folder');
+const folderNameInput = document.getElementById('input-folder-names');
 
-btnCreateFolder.addEventListener("click", () => {
-  window.electronAPI.createFolder(folderNameInput.value.toUpperCase());
-  folderNameInput.value = "";
+btnCreateFolder.addEventListener('click', () => {
+  const gameCodes = folderNameInput.value
+    .toUpperCase()
+    .split('\n')
+    .map((gameCode) => gameCode.trim());
+
+  window.electronAPI.storeGameCodes(gameCodes);
+  window.electronAPI.createFolders(gameCodes);
+  folderNameInput.value = '';
 });

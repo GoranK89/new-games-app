@@ -1,38 +1,32 @@
-const fs = require("fs");
+const fs = require('fs');
 
-const specialGameProviders = ["MGSD", "MGSM", "NETEM", "NETED"];
+const specialGameProviders = ['MGSD', 'MGSM', 'NETEM', 'NETED'];
 
 // works on simple game codes (names and versions) not on "no buy feature" game codes yet
 const extractBaseGame = (gameLink) => {
-  const modifiedGameLink = gameLink.replace("games[]=", "").split("_");
+  const modifiedGameLink = gameLink.replace('games[]=', '').split('_');
   const lastItem = Number(modifiedGameLink[modifiedGameLink.length - 1]);
 
   if (!isNaN(lastItem)) {
     modifiedGameLink.pop();
   }
-  const baseGame = modifiedGameLink.join("_"); //GP/GP_GAME
-  console.log(
-    `${gameLink} converted to: ${baseGame}, checking if converted value exists in Icons.txt`
-  );
+  const baseGame = modifiedGameLink.join('_'); //GP/GP_GAME
   return baseGame;
 };
 
 const removeGameVersion = (gameCode) => {
-  const gameCodeTransform = gameCode.split("_");
+  const gameCodeTransform = gameCode.split('_');
   const lastItem = Number(gameCodeTransform[gameCodeTransform.length - 1]);
 
   if (!isNaN(lastItem)) {
     gameCodeTransform.pop();
   }
-  const noVersionGameCode = gameCodeTransform.join("_");
-  console.log(
-    `${gameCode} version number ${lastItem} removed, symlink will be bound to ${noVersionGameCode}`
-  );
+  const noVersionGameCode = gameCodeTransform.join('_');
   return noVersionGameCode;
 };
 
 const createGameLink = (gameCode) => {
-  const gameProvider = gameCode.split("_")[0];
+  const gameProvider = gameCode.split('_')[0];
   const baseGameLink = `games[]=${gameProvider}/${gameCode}\n`;
 
   if (specialGameProviders.includes(gameProvider)) {
@@ -46,9 +40,9 @@ const createGameLink = (gameCode) => {
 const createSymlink = (gameCode, existingLinks) => {
   const baseGame = extractBaseGame(createGameLink(gameCode));
   const foundBindTo = existingLinks.find((item) => item.includes(baseGame));
-  const bindTo = foundBindTo?.replace("games[]=", "");
+  const bindTo = foundBindTo?.replace('games[]=', '');
 
-  const gameProvider = gameCode.split("_")[0];
+  const gameProvider = gameCode.split('_')[0];
   const baseSymlink = `symlinks[]=${gameProvider}/${gameCode},${bindTo}\n`;
 
   if (specialGameProviders.includes(gameProvider)) {
@@ -59,39 +53,30 @@ const createSymlink = (gameCode, existingLinks) => {
   }
 };
 
-const createLink = (path, gameCode) => {
-  const gameLink = createGameLink(gameCode);
-  const baseGame = extractBaseGame(gameLink);
-  const noVersionGameCode = removeGameVersion(gameCode);
-
-  if (fs.existsSync(`${path}/Icons.txt`)) {
-    fs.readFile(`${path}/Icons.txt`, "utf8", (err, data) => {
-      let existingLinks = data.trim().split("\n");
-
-      const symlink = createSymlink(gameCode, existingLinks);
-
-      // if game gameLink does not exist and gameCode without version does not exist create games link
-      if (
-        !existingLinks.some((link) => link.includes(gameLink)) &&
-        !existingLinks.some((link) => link.includes(noVersionGameCode))
-      ) {
-        fs.appendFile(`${path}/Icons.txt`, gameLink, (err) => {
-          if (err) throw err;
-        });
-      }
-
-      // if string GP/GP_GAME exists create symlink
-      if (existingLinks.some((link) => link.includes(baseGame))) {
-        fs.appendFile(`${path}/Icons.txt`, symlink, (err) => {
-          if (err) throw err;
-        });
-      }
-    });
-  } else {
-    fs.appendFile(`${path}/Icons.txt`, gameLink, (err) => {
-      if (err) throw err;
-    });
+const readJsonFile = (path) => {
+  if (fs.existsSync(`${path}/gameCodes.json`)) {
+    const data = fs.readFileSync(`${path}/gameCodes.json`, 'utf8');
+    const gameCodes = JSON.parse(data);
+    console.log(gameCodes);
+    return gameCodes;
   }
 };
 
-module.exports = createLink;
+const createLinks = (path, gameCodes) => {
+  const jsonData = readJsonFile(path);
+
+  jsonData.forEach((gameCode) => {
+    const gameLink = createGameLink(gameCode);
+  });
+
+  /*
+  PP_GAME
+  PP_GAME_90
+  PP_GAME_88
+  XX_GAME_95
+  ST_GAME_IS_THIS
+  ST_GAME_IS_THIS_90
+  */
+};
+
+module.exports = createLinks;
