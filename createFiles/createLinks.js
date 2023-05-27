@@ -2,18 +2,20 @@ const fs = require('fs');
 
 const specialGameProviders = ['MGSD', 'MGSM', 'NETEM', 'NETED'];
 
+// used for checking if "GP/GP_GAME" exists in an array
 // works on simple game codes (names and versions) not on "no buy feature" game codes yet
-const extractBaseGame = (gameLink) => {
-  const modifiedGameLink = gameLink.replace('games[]=', '').split('_');
-  const lastItem = Number(modifiedGameLink[modifiedGameLink.length - 1]);
+const getPureGameLink = (gameLink) => {
+  const gameLinkParts = gameLink.replace('games[]=', '').split('_');
+  const lastPart = Number(gameLinkParts[gameLinkParts.length - 1]);
 
-  if (!isNaN(lastItem)) {
-    modifiedGameLink.pop();
+  if (!isNaN(lastPart)) {
+    gameLinkParts.pop();
   }
-  const baseGame = modifiedGameLink.join('_'); //GP/GP_GAME
+  const baseGame = gameLinkParts.join('_'); //GP/GP_GAME
   return baseGame;
 };
 
+// rework this to remove any extra info from the game code
 const removeGameVersion = (gameCode) => {
   const gameCodeTransform = gameCode.split('_');
   const lastItem = Number(gameCodeTransform[gameCodeTransform.length - 1]);
@@ -27,27 +29,31 @@ const removeGameVersion = (gameCode) => {
 
 const createGameLink = (gameCode) => {
   const gameProvider = gameCode.split('_')[0];
-  const baseGameLink = `games[]=${gameProvider}/${gameCode}\n`;
+  const baseGameLink = `games[]=${gameProvider}/${gameCode}`;
 
   if (specialGameProviders.includes(gameProvider)) {
     const exceptionCode = gameProvider.slice(0, -1);
-    return `games[]=${exceptionCode}/${gameCode}\n`;
+    return `games[]=${exceptionCode}/${gameCode}`;
   } else {
     return baseGameLink;
   }
 };
 
 const createSymlink = (gameCode, existingLinks) => {
-  const baseGame = extractBaseGame(createGameLink(gameCode));
-  const foundBindTo = existingLinks.find((item) => item.includes(baseGame));
-  const bindTo = foundBindTo?.replace('games[]=', '');
-
   const gameProvider = gameCode.split('_')[0];
-  const baseSymlink = `symlinks[]=${gameProvider}/${gameCode},${bindTo}\n`;
+  const gameCodeWithoutVersion = removeGameVersion(gameCode);
+
+  const foundLink = existingLinks.find((item) =>
+    item.includes(gameCodeWithoutVersion)
+  );
+  const foundGameProvider = foundLink.split('/')[0];
+  const bindTo = foundLink.replace(foundGameProvider, gameProvider);
+
+  const baseSymlink = `symlinks[]=${gameProvider}/${gameCode},${bindTo}`;
 
   if (specialGameProviders.includes(gameProvider)) {
     const exceptionCode = gameProvider.slice(0, -1);
-    return `symlinks[]=${exceptionCode}/${gameCode},${bindTo}\n`;
+    return `symlinks[]=${exceptionCode}/${gameCode},${bindTo}`;
   } else {
     return baseSymlink;
   }
@@ -57,26 +63,28 @@ const readJsonFile = (path) => {
   if (fs.existsSync(`${path}/gameCodes.json`)) {
     const data = fs.readFileSync(`${path}/gameCodes.json`, 'utf8');
     const gameCodes = JSON.parse(data);
-    console.log(gameCodes);
     return gameCodes;
   }
 };
 
-const createLinks = (path, gameCodes) => {
+const createLinks = (path) => {
   const jsonData = readJsonFile(path);
 
+  const gameLinks = [];
+  const symLinks = [];
+
   jsonData.forEach((gameCode) => {
-    const gameLink = createGameLink(gameCode);
+    const pureGameLink = getPureGameLink(gameCode);
+
+    if (!gameLinks.some((item) => item.includes(pureGameLink))) {
+      gameLinks.push(createGameLink(gameCode));
+    } else {
+      symLinks.push(createSymlink(gameCode, gameLinks));
+    }
   });
 
-  /*
-  PP_GAME
-  PP_GAME_90
-  PP_GAME_88
-  XX_GAME_95
-  ST_GAME_IS_THIS
-  ST_GAME_IS_THIS_90
-  */
+  console.log('gameLinks', gameLinks);
+  console.log('symLinks', symLinks);
 };
 
 module.exports = createLinks;
