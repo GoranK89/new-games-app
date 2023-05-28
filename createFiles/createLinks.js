@@ -41,6 +41,7 @@ const createGameLink = (gameCode) => {
 
 const createSymlink = (gameCode, existingLinks) => {
   const gameProvider = gameCode.split('_')[0];
+
   const gameCodeWithoutVersion = removeGameVersion(gameCode);
 
   const foundLink = existingLinks.find((item) =>

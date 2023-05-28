@@ -7,7 +7,14 @@ const createGameFolders = (path, gameCodes) => {
 
   gameCodes.forEach((gameCode) => {
     const folderPath = `${path}/${gameCode}`;
-    const gameName = gameCode.split('_')[0];
+    const gameCodeParts = gameCode.split('_');
+    const lastPart = Number(gameCodeParts[gameCodeParts.length - 1]);
+
+    if (!isNaN(lastPart)) {
+      gameCodeParts.pop();
+    }
+
+    const gameName = gameCodeParts.join('_');
 
     if (!gameNames.has(gameName)) {
       gameNames.add(gameName);
