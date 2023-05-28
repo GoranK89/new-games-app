@@ -1,8 +1,8 @@
-const { contextBridge, ipcRenderer } = require("electron");
+const { contextBridge, ipcRenderer } = require('electron');
 
-contextBridge.exposeInMainWorld("electronAPI", {
-  createFolders: (gameCodes) => ipcRenderer.send("create-folders", gameCodes),
+contextBridge.exposeInMainWorld('electronAPI', {
+  createFolders: () => ipcRenderer.send('create-folders'),
 
   storeGameCodes: (gameCodes) =>
-    ipcRenderer.invoke("store-game-codes", gameCodes),
+    ipcRenderer.invoke('store-game-codes', gameCodes),
 });

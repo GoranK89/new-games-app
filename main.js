@@ -10,13 +10,15 @@ const createLink = require('./createFiles/createLinks');
 const desktopPath = app.getPath('desktop');
 const mainPath = `${desktopPath}/Icon Upload`;
 
-function prepareNewUpload(event, gameCodes) {
+function prepareNewUpload(event) {
+  const gameCodes = readJsonFile(mainPath);
+
   // Main folder
   creatNewUploadFolder(desktopPath);
 
   // Inside folder
   createGameFolder(mainPath, gameCodes);
-  createLink(mainPath);
+  createLink(mainPath, gameCodes);
 }
 
 function storeGameCodes(event, gameCodes) {
@@ -39,6 +41,14 @@ function storeGameCodes(event, gameCodes) {
 
   fs.writeFileSync(gameCodesPath, gameCodesJSON);
 }
+
+const readJsonFile = (path) => {
+  if (fs.existsSync(`${path}/gameCodes.json`)) {
+    const data = fs.readFileSync(`${path}/gameCodes.json`, 'utf8');
+    const gameCodes = JSON.parse(data);
+    return gameCodes;
+  }
+};
 
 // maybe it's safer to use game codes instead of names
 function generateGameCode(gameProvider, gameName) {

@@ -60,21 +60,14 @@ const createSymlink = (gameCode, existingLinks) => {
   }
 };
 
-const readJsonFile = (path) => {
-  if (fs.existsSync(`${path}/gameCodes.json`)) {
-    const data = fs.readFileSync(`${path}/gameCodes.json`, 'utf8');
-    const gameCodes = JSON.parse(data);
-    return gameCodes;
-  }
-};
-
-const createLinks = (path) => {
-  const jsonData = readJsonFile(path);
+const createLinks = (path, gameCodes) => {
+  if (!fs.existsSync(`${path}/icons.txt`))
+    fs.writeFileSync(`${path}/icons.txt`, '');
 
   const gameLinks = [];
   const symLinks = [];
 
-  jsonData.forEach((gameCode) => {
+  gameCodes.forEach((gameCode) => {
     const pureGameLink = getPureGameLink(gameCode);
 
     if (!gameLinks.some((item) => item.includes(pureGameLink))) {
@@ -84,8 +77,21 @@ const createLinks = (path) => {
     }
   });
 
-  console.log('gameLinks', gameLinks);
-  console.log('symLinks', symLinks);
+  const existingLinks = fs
+    .readFileSync(`${path}/icons.txt`, 'utf8')
+    .split('\n');
+
+  gameLinks.forEach((gameLink) => {
+    if (!existingLinks.includes(gameLink)) {
+      fs.appendFileSync(`${path}/icons.txt`, `${gameLink}\n`);
+    }
+  });
+
+  symLinks.forEach((symLink) => {
+    if (!existingLinks.includes(symLink)) {
+      fs.appendFileSync(`${path}/icons.txt`, `${symLink}\n`);
+    }
+  });
 };
 
 module.exports = createLinks;

@@ -5,7 +5,7 @@ const createGameDescription = require('../createFiles/createGameDescription');
 const createGameFolders = (path, gameCodes) => {
   const gameNames = new Set();
 
-  gameCodes.forEach((gameCode) => {
+  gameCodes?.forEach((gameCode) => {
     const folderPath = `${path}/${gameCode}`;
     const gameCodeParts = gameCode.split('_');
     const lastPart = Number(gameCodeParts[gameCodeParts.length - 1]);
