@@ -5,9 +5,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>New Games</title>
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <h1>New Games app</h1>
+    <section class="side-menu">
+      <h2>NGARAP</h2>
+      <ul>
+        <li><a href="#">Game Codes</a></li>
+        <li><a href="#">Icon Upload</a></li>
+        <li><a href="#">TBD</a></li>
+      </ul>
+    </section>
     <section class="section-create-folders">
       <h2>Create folders for icons</h2>
       <textarea
@@ -17,35 +25,9 @@
         type="text"
         placeholder="Enter game codes, one code per line"
       ></textarea>
-      <button id="btn-create-folder">Create folders</button>
+      <button id="btn-create-folder" class="btn">Create folders</button>
     </section>
-    <div>
-      <h2>How it currently works</h2>
-      <ol>
-        <li>Codes get stored in JSON, duplicates get cleaned up</li>
-        <li>
-          Create folders -> creates folders, based on stored game codes in JSON
-        </li>
-        <li>
-          Create game/sym links -> creates Icons.txt file based on stored game
-          codes
-        </li>
-      </ol>
-      <p>
-        This seperate/modular way still allows just creating folders, later
-        game/sym link generation should be toggled based on inputs or JSON codes
-      </p>
-      <h2>TODO</h2>
-      <ul>
-        <li>Title & description generation must be improved</li>
-        <li>Icons still have to be manually downloaded and copied</li>
-        <li>Tested on game codes: GP_GAME_NAME or GP_GAME_NAME_90</li>
-        <li>
-          special game providers like netent and microgaming not working yet
-        </li>
-      </ul>
-    </div>
-    <div>
+    <section>
       <select>
         <option value="PP">Pragmatic Play</option>
         <option value="PP">Evolution</option>
@@ -57,8 +39,8 @@
         type="text"
         placeholder="Enter game names, one name per line"
       ></textarea>
-      <button>Generate game Codes</button>
-    </div>
+      <button class="btn">Generate game Codes</button>
+    </section>
   </body>
   <script src="./renderer.js"></script>
 </html>
