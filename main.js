@@ -10,25 +10,6 @@ const createLink = require('./createFiles/createLinks');
 const desktopPath = app.getPath('desktop');
 const mainPath = `${desktopPath}/Icon Upload`;
 
-const readJsonFile = (path) => {
-  if (fs.existsSync(`${path}/gameCodes.json`)) {
-    const data = fs.readFileSync(`${path}/gameCodes.json`, 'utf8');
-    const gameCodes = JSON.parse(data);
-    return gameCodes;
-  }
-};
-
-function prepareNewUpload(event) {
-  const gameCodes = readJsonFile(mainPath);
-
-  // Main folder
-  creatNewUploadFolder(desktopPath);
-
-  // Inside folder
-  createGameFolder(mainPath, gameCodes);
-  createLink(mainPath, gameCodes);
-}
-
 function storeGameCodes(event, gameCodes) {
   const gameCodesPath = `${mainPath}/gameCodes.json`;
 
@@ -50,16 +31,26 @@ function storeGameCodes(event, gameCodes) {
   fs.writeFileSync(gameCodesPath, gameCodesJSON);
 }
 
-// maybe it's safer to use game codes instead of names
-function generateGameCode(gameProvider, gameName) {
-  const sanitized = gameName.replace(/[^a-zA-Z ]/g, '').toUpperCase();
-  const gameCode = sanitized.replace(/\s+/g, '_');
-  const finalGameCode = `${gameProvider}_${gameCode}`;
+const readStoredGameCodes = (path) => {
+  if (fs.existsSync(`${path}/gameCodes.json`)) {
+    const data = fs.readFileSync(`${path}/gameCodes.json`, 'utf8');
+    const gameCodes = JSON.parse(data);
+    return gameCodes;
+  }
+};
 
-  console.log(finalGameCode);
-  console.log('gameName', gameName);
+function prepareNewUpload(event) {
+  const gameCodes = readStoredGameCodes(mainPath);
+
+  // Main folder
+  creatNewUploadFolder(desktopPath);
+
+  // Inside folder
+  createGameFolder(mainPath, gameCodes);
+  createLink(mainPath, gameCodes);
 }
 
+//////// Electron specific funtionality ////////
 const createWindow = () => {
   const win = new BrowserWindow({
     width: 1000,
