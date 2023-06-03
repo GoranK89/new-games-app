@@ -2,48 +2,34 @@ const fs = require('fs');
 const createLaunchFolder = require('./createLaunchFolder');
 const createGameDescription = require('../createFiles/createGameDescription');
 
-const addGameCodesToSet = (gameCode) => {
-  if (gameCode.includes('MGSD') || gameCode.includes('MGSM')) {
-    const MGScode = processMGScodes(gameCode);
-    return MGScode;
-  } else {
-    const defaultGameCode = processDefaultCodes(gameCode);
-    return defaultGameCode;
-  }
-};
-
-const processDefaultCodes = (gameCode) => {
+const generatePureGameCode = (gameCode) => {
+  // cut away the game provider
   const gameCodeParts = gameCode.split('_');
-  const lastPart = Number(gameCodeParts[gameCodeParts.length - 1]);
-  if (!isNaN(lastPart)) {
-    gameCodeParts.pop();
-  }
-  const gameName = gameCodeParts.join('_');
-  return gameName;
-};
-
-const processMGScodes = (gameCode) => {
-  const gameCodeParts = gameCode.split('_');
+  gameCodeParts.shift();
+  // check if the last part is a number and recognize if it is a version (RTP)
   const lastPart = gameCodeParts[gameCodeParts.length - 1];
   const last2Letters = lastPart.slice(-2);
   const last2Numbers = Number(last2Letters);
-  gameCodeParts.shift();
-  if (!isNaN(last2Numbers)) {
+  const isVersion =
+    last2Numbers > 80 && last2Numbers < 100 ? last2Numbers : null;
+  // pop the last part if it is a version (RTP)
+  if (isVersion) {
     gameCodeParts.pop();
   }
-  const noGpGameCode = gameCodeParts.join('_');
-  return noGpGameCode;
+
+  const pureGameCode = gameCodeParts.join('_');
+  return pureGameCode;
 };
 
 const createGameFolders = (path, gameCodes) => {
-  const gameNames = new Set();
+  const uniqueFolderNames = new Set();
 
   gameCodes?.forEach((gameCode) => {
     const folderPath = `${path}/${gameCode}`;
-    const gameName = addGameCodesToSet(gameCode);
+    const pureGameCode = generatePureGameCode(gameCode);
 
-    if (!gameNames.has(gameName)) {
-      gameNames.add(gameName);
+    if (!uniqueFolderNames.has(pureGameCode)) {
+      uniqueFolderNames.add(pureGameCode);
 
       if (!fs.existsSync(folderPath)) {
         fs.mkdirSync(folderPath);
@@ -51,7 +37,7 @@ const createGameFolders = (path, gameCodes) => {
         createLaunchFolder(`${folderPath}/original`);
         createGameDescription(`${folderPath}`, gameCode);
       } else {
-        console.log(`Folder ${gameCode} already exists`);
+        console.log(`Folder for ${gameCode} already exists`);
       }
     }
   });
