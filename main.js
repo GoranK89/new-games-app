@@ -3,10 +3,12 @@ const electronReload = require('electron-reload');
 const path = require('path');
 const fs = require('fs');
 
+// MODULES
 const creatNewUploadFolder = require('./createFolders/createNewUploadFolder');
 const createGameFolder = require('./createFolders/createGameFolders');
 const createLink = require('./createFiles/createLinks');
 
+// PATHS
 const desktopPath = app.getPath('desktop');
 const mainPath = `${desktopPath}/Icon Upload`;
 

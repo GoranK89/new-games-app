@@ -13,6 +13,7 @@ const specialGameProviders = [
   'MGSM',
   'NETED',
   'NETEE',
+  'NETEH',
   'NETEM',
   'PLS',
   'PLSM',
