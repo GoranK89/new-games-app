@@ -2,9 +2,8 @@ const fs = require('fs');
 const specialGameProviders = require('../gameProviders');
 
 // rework this to remove any extra info from the game code
-const removePreSufix = (gameCode) => {
+const cutGpAndSuffix = (gameCode) => {
   const gameCodeParts = gameCode.split('_');
-  const gameProvider = gameCodeParts[0];
   gameCodeParts.shift();
   const lastPart = gameCodeParts[gameCodeParts.length - 1];
   const last2Letters = lastPart.slice(-2);
@@ -15,8 +14,8 @@ const removePreSufix = (gameCode) => {
   if (isVersion) {
     gameCodeParts.pop();
   }
-  const pureGameCode = gameCodeParts.join('_');
-  return pureGameCode;
+  const noGpNoSuffixGameCode = gameCodeParts.join('_');
+  return noGpNoSuffixGameCode;
 };
 
 const createGameLink = (gameCode) => {
@@ -41,7 +40,7 @@ const createGameLink = (gameCode) => {
 
 const createSymlink = (gameCode, existingLinks) => {
   const gameProvider = gameCode.split('_')[0];
-  const gameCodeName = removePreSufix(gameCode);
+  const gameCodeName = cutGpAndSuffix(gameCode);
 
   const matchingGameLink = existingLinks.find((item) =>
     item.includes(gameCodeName)
@@ -74,23 +73,11 @@ const createLinks = (path, gameCodes) => {
   const symLinks = [];
 
   gameCodes.forEach((gameCode) => {
-    // split away the game provider and version
-    const gameCodeParts = gameCode.split('_');
-    const gameProvider = gameCodeParts[0];
-    gameCodeParts.shift();
-    const lastPart = gameCodeParts[gameCodeParts.length - 1];
-    const last2Letters = lastPart.slice(-2);
-    const last2Numbers = Number(last2Letters);
-    const isVersion =
-      last2Numbers > 80 && last2Numbers < 100 ? last2Numbers : null;
-    // pop the last part if it is a version (RTP)
-    if (isVersion) {
-      gameCodeParts.pop();
-    }
-    const pureGameCode = gameCodeParts.join('_');
+    const noGpNoSuffixGameCode = cutGpAndSuffix(gameCode);
+    const gameProvider = gameCode.split('_')[0];
 
     if (gameProvider === 'WD' || gameProvider === 'TOM') {
-      if (!gameLinks.some((item) => item.includes(pureGameCode))) {
+      if (!gameLinks.some((item) => item.includes(noGpNoSuffixGameCode))) {
         gameLinks.push(createGameLink(gameCode));
         return;
       }
@@ -100,7 +87,7 @@ const createLinks = (path, gameCodes) => {
     }
 
     if (
-      !gameLinks.some((item) => item.includes(pureGameCode)) &&
+      !gameLinks.some((item) => item.includes(noGpNoSuffixGameCode)) &&
       specialGameProviders.includes(gameProvider) &&
       gameProvider.endsWith('D' || 'E' || 'H')
     ) {
@@ -108,7 +95,7 @@ const createLinks = (path, gameCodes) => {
       return;
     }
 
-    if (!gameLinks.some((item) => item.includes(pureGameCode))) {
+    if (!gameLinks.some((item) => item.includes(noGpNoSuffixGameCode))) {
       gameLinks.push(createGameLink(gameCode));
     } else {
       symLinks.push(createSymlink(gameCode, gameLinks));
