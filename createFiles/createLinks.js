@@ -1,7 +1,7 @@
 const fs = require('fs');
 const specialGameProviders = require('../gameProviders');
 
-// rework this to remove any extra info from the game code
+// still robust, does not work for game codes with string suffixes like NOBB
 const cutGpAndSuffix = (gameCode) => {
   const gameCodeParts = gameCode.split('_');
   gameCodeParts.shift();
@@ -117,6 +117,37 @@ const createLinks = (path, gameCodes) => {
       fs.appendFileSync(`${path}/icons.txt`, `${symLink}\n`);
     }
   });
+
+  ///// SORTING the created links //////
+  const groupedLinks = [];
+
+  existingLinks.forEach((link) => {
+    const gameProvider = link
+      .split('/')[0]
+      .replace(/(games\[\]=|symlinks\[\]=)/, '');
+
+    const group = groupedLinks.find((g) => g.gameProvider === gameProvider);
+    if (group) {
+      group.links.push(link);
+    } else {
+      groupedLinks.push({
+        gameProvider,
+        links: [link],
+      });
+    }
+  });
+
+  const stream = fs.createWriteStream(`${path}/sorted-icons.txt`);
+  groupedLinks.forEach((group) => {
+    stream.write(`Game Provider: ${group.gameProvider}\n`);
+    group.links.forEach((link, index) => {
+      stream.write(`${link}\n`);
+      if (index === group.links.length - 1) {
+        stream.write('\n');
+      }
+    });
+  });
+  stream.end();
 };
 
 module.exports = createLinks;

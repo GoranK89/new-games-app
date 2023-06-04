@@ -4,7 +4,6 @@ const folderNameInput = document.getElementById('input-folder-names');
 btnCreateFolder.addEventListener('click', () => {
   // if (!folderNameInput.value) return;
   const gameCodes = folderNameInput.value
-    .toUpperCase()
     .split('\n')
     .filter((line) => line.trim() !== '')
     .map((gameCode) => gameCode.trim());
