@@ -6,7 +6,7 @@ const fs = require('fs');
 // MODULES
 const creatNewUploadFolder = require('./createFolders/createNewUploadFolder');
 const createGameFolder = require('./createFolders/createGameFolders');
-const createLink = require('./createFiles/createLinks');
+const createLinks = require('./createFiles/createLinks');
 
 // PATHS
 const desktopPath = app.getPath('desktop');
@@ -49,7 +49,7 @@ function prepareNewUpload(event) {
 
   // Inside folder
   createGameFolder(mainPath, gameCodes);
-  createLink(mainPath, gameCodes);
+  createLinks(mainPath, gameCodes);
 }
 
 //////// Electron specific funtionality ////////

@@ -76,6 +76,7 @@ const createLinks = (path, gameCodes) => {
     const noGpNoSuffixGameCode = cutGpAndSuffix(gameCode);
     const gameProvider = gameCode.split('_')[0];
 
+    // NOTE: refactor, not readable
     if (gameProvider === 'WD' || gameProvider === 'TOM') {
       if (!gameLinks.some((item) => item.includes(noGpNoSuffixGameCode))) {
         gameLinks.push(createGameLink(gameCode));
@@ -102,6 +103,7 @@ const createLinks = (path, gameCodes) => {
     }
   });
 
+  // read icons.txt, check for duplicates, append links
   const existingLinks = fs
     .readFileSync(`${path}/icons.txt`, 'utf8')
     .split('\n');
