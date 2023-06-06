@@ -2,6 +2,12 @@ const btnCreateFolder = document.getElementById('btn-create-folder');
 const folderNameInput = document.getElementById('input-folder-names');
 
 const sideMenu = document.querySelector('.side-menu__list');
+const sections = {
+  dashboard: document.getElementById('dashboard-section'),
+  gameCodes: document.getElementById('game-codes-section'),
+  gameFolders: document.getElementById('game-folders-section'),
+  uploadCheck: document.getElementById('upload-check-section'),
+};
 
 sideMenu.addEventListener('click', (event) => {
   const menuItem = event.target.closest('a');
@@ -12,6 +18,15 @@ sideMenu.addEventListener('click', (event) => {
   });
 
   menuItem.classList.toggle('active');
+
+  for (const section in sections) {
+    if (section === menuItem.getAttribute('data')) {
+      console.log(section, menuItem.getAttribute('data'));
+      sections[section].classList.remove('hidden');
+    } else {
+      sections[section].classList.add('hidden');
+    }
+  }
 });
 
 btnCreateFolder.addEventListener('click', () => {

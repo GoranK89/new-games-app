@@ -11,31 +11,22 @@
     <section class="side-menu">
       <h2 class="side-menu__title">NGARAP</h2>
       <ul class="side-menu__list">
-        <li><a class="active" href="#">Dashboard</a></li>
-        <li><a href="#">Game Codes</a></li>
-        <li><a href="#">Icon Upload</a></li>
-        <li><a href="#">After Upload Check</a></li>
+        <li>
+          <a class="active" href="#" data="dashboard">Dashboard</a>
+        </li>
+        <li><a href="#" data="gameCodes">Game Codes</a></li>
+        <li><a href="#" data="gameFolders">Icon Upload</a></li>
+        <li><a href="#" data="uploadCheck">After Upload Check</a></li>
       </ul>
     </section>
-    <section class="dashboard">
+    <section id="dashboard-section">
       <ul>
         <li>number of games added per week, most popular icons</li>
         <li>todo list</li>
         <li>calendar with important dates</li>
       </ul>
     </section>
-    <section class="section-create-folders">
-      <h2>Create folders for icons</h2>
-      <textarea
-        id="input-folder-names"
-        rows="5"
-        cols="30"
-        type="text"
-        placeholder="Enter game codes, one code per line"
-      ></textarea>
-      <button id="btn-create-folder" class="btn">Prepare Upload</button>
-    </section>
-    <section>
+    <section id="game-codes-section" class="hidden">
       <select>
         <option value="PP">Pragmatic Play</option>
         <option value="PP">Evolution</option>
@@ -48,6 +39,22 @@
         placeholder="Enter game names, one name per line"
       ></textarea>
       <button class="btn">Generate game Codes</button>
+    </section>
+    <section id="game-folders-section" class="hidden">
+      <h2>Create folders for icons</h2>
+      <textarea
+        id="input-folder-names"
+        rows="5"
+        cols="30"
+        type="text"
+        placeholder="Enter game codes, one code per line"
+      ></textarea>
+      <button id="btn-create-folder" class="btn">Prepare Upload</button>
+    </section>
+    <section id="upload-check-section" class="hidden">
+      <ul>
+        <li>generate clickable links based on all stored game codes</li>
+      </ul>
     </section>
   </body>
   <script src="./renderer.js"></script>
