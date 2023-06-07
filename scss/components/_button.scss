@@ -1,0 +1,7 @@
+.btn-green {
+  @include button($green, $white);
+}
+
+.btn-yellow {
+  @include button($corn, $white);
+}

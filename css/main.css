@@ -8,7 +8,7 @@
 }
 
 html {
-  font-size: 62.5%; /* 1rem = 10px */
+  font-size: 62.5%;
 }
 
 body {
@@ -31,12 +31,63 @@ input[type=number]::-webkit-outer-spin-button {
   margin: 0;
 }
 
+.btn-green {
+  cursor: pointer;
+  border: none;
+  display: inline-block;
+  padding: 12px 24px;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  text-transform: uppercase;
+  background-color: #3db75f;
+  color: #fff;
+  position: relative;
+  top: 0;
+  transition: top 0.2s ease-in-out;
+}
+.btn-green:hover {
+  background-color: #30914b;
+  top: -2px;
+}
+.btn-green:active {
+  top: 2px;
+}
+
+.btn-yellow {
+  cursor: pointer;
+  border: none;
+  display: inline-block;
+  padding: 12px 24px;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  text-transform: uppercase;
+  background-color: #f6bf07;
+  color: #fff;
+  position: relative;
+  top: 0;
+  transition: top 0.2s ease-in-out;
+}
+.btn-yellow:hover {
+  background-color: #c49806;
+  top: -2px;
+}
+.btn-yellow:active {
+  top: 2px;
+}
+
 body {
   display: grid;
   grid-template-columns: 1fr 4fr;
   gap: 3rem;
   font-family: "Nunito", sans-serif;
   background-color: #e6e6fa;
+}
+body .hidden {
+  display: none !important;
 }
 body .side-menu {
   grid-row: 1/4;
@@ -79,26 +130,19 @@ body #game-folders-section {
   gap: 2rem;
   flex-direction: column;
   align-items: flex-start;
+  margin-top: 2rem;
 }
-body .hidden {
-  display: none !important;
+body #dashboard-section {
+  margin-top: 5rem;
 }
-
-.btn {
-  cursor: pointer;
-  border: none;
-  display: inline-block;
-  padding: 12px 24px;
-  border-radius: 4px;
-  font-size: 16px;
-  font-weight: bold;
-  text-align: center;
-  text-transform: uppercase;
-  background-color: #0077c2;
-  color: #fff;
+body #dashboard-section .stats-container {
+  display: flex;
+  justify-content: space-evenly;
 }
-.btn:hover {
-  background-color: #005ea2;
+body #dashboard-section .stats-container .stat-box {
+  padding: 2rem 4rem;
+  border-radius: 5px;
+  background-color: lightsalmon;
 }
 
 textarea {

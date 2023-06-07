@@ -5,4 +5,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
 
   storeGameCodes: (gameCodes) =>
     ipcRenderer.invoke('store-game-codes', gameCodes),
+
+  pasteIcons: () => ipcRenderer.send('paste-icons'),
 });

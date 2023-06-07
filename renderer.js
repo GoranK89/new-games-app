@@ -1,4 +1,6 @@
 const btnCreateFolder = document.getElementById('btn-create-folder');
+const btnPasteIcons = document.getElementById('btn-paste-icons');
+
 const folderNameInput = document.getElementById('input-folder-names');
 
 const sideMenu = document.querySelector('.side-menu__list');
@@ -39,4 +41,8 @@ btnCreateFolder.addEventListener('click', () => {
   window.electronAPI.storeGameCodes(gameCodes);
   window.electronAPI.createFolders();
   folderNameInput.value = '';
+});
+
+btnPasteIcons.addEventListener('click', () => {
+  window.electronAPI.pasteIcons();
 });

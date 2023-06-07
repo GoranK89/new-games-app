@@ -5,6 +5,10 @@ body {
   font-family: 'Nunito', sans-serif;
   background-color: $lavender;
 
+  .hidden {
+    display: none !important;
+  }
+
   .side-menu {
     grid-row: 1/4;
     height: 100vh;
@@ -84,9 +88,21 @@ body {
     gap: 2rem;
     flex-direction: column;
     align-items: flex-start;
+    margin-top: 2rem;
   }
 
-  .hidden {
-    display: none !important;
+  #dashboard-section {
+    margin-top: 5rem;
+
+    .stats-container {
+      display: flex;
+      justify-content: space-evenly;
+
+      .stat-box {
+        padding: 2rem 4rem;
+        border-radius: 5px;
+        background-color: lightsalmon;
+      }
+    }
   }
 }

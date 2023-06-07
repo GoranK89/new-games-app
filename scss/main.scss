@@ -1,7 +1,14 @@
-@import './variables';
-@import './reset';
+@import './base/base';
+@import './base/animations';
+@import './base/typography';
+@import './base/utilities';
+
+@import './abstract/variables';
+@import './abstract/mixins';
+
+@import './components/button';
+
 @import './layout';
-@import './buttons';
 
 textarea {
   display: block;

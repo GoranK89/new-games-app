@@ -20,11 +20,11 @@
       </ul>
     </section>
     <section id="dashboard-section">
-      <ul>
-        <li>number of games added per week, most popular icons</li>
-        <li>todo list</li>
-        <li>calendar with important dates</li>
-      </ul>
+      <div class="stats-container">
+        <div class="stat-box">Folders Created</div>
+        <div class="stat-box">Links Written</div>
+        <div class="stat-box">Time Saved</div>
+      </div>
     </section>
     <section id="game-codes-section" class="hidden">
       <select>
@@ -38,10 +38,15 @@
         type="text"
         placeholder="Enter game names, one name per line"
       ></textarea>
-      <button class="btn">Generate game Codes</button>
+      <button class="btn-green">Generate game Codes</button>
     </section>
     <section id="game-folders-section" class="hidden">
-      <h2>Create folders for icons</h2>
+      <h2>Create folders and links</h2>
+      <p>Creates all necessary folders, sub-folders and icons.txt.</p>
+      <p>
+        If the game name had any other characters than text or numbers (' : "
+        -), it has to be manually added in the game_en.ini (for now).
+      </p>
       <textarea
         id="input-folder-names"
         rows="5"
@@ -49,7 +54,12 @@
         type="text"
         placeholder="Enter game codes, one code per line"
       ></textarea>
-      <button id="btn-create-folder" class="btn">Prepare Upload</button>
+      <button id="btn-create-folder" class="btn-green">Prepare upload</button>
+      <p>
+        Finds unzipped matching icons based on their folder name and pastes them
+        in the relevant folders
+      </p>
+      <button id="btn-paste-icons" class="btn-yellow">Paste icons</button>
     </section>
     <section id="upload-check-section" class="hidden">
       <ul>

@@ -52,6 +52,15 @@ function prepareNewUpload(event) {
   createLinks(mainPath, gameCodes);
 }
 
+function pasteIcons(event) {
+  console.log('Paste icons function called');
+  // search for folder names similar to game codes on the desktop or in a file
+  // if found copy the contents
+  // find the relevant folder in the upload folder and paste the copied contents
+  // repeat for all game codes
+  // in the end do a delayed? check if any folders are empty
+}
+
 //////// Electron specific funtionality ////////
 const createWindow = () => {
   const win = new BrowserWindow({
@@ -65,8 +74,9 @@ const createWindow = () => {
 };
 
 app.whenReady().then(() => {
-  ipcMain.on('create-folders', prepareNewUpload);
   ipcMain.handle('store-game-codes', storeGameCodes);
+  ipcMain.on('create-folders', prepareNewUpload);
+  ipcMain.on('paste-icons', pasteIcons);
   createWindow();
 
   app.on('activate', () => {
