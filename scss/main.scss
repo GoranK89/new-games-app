@@ -8,24 +8,7 @@
 
 @import './components/button';
 
-@import './layout';
-
-textarea {
-  display: block;
-  width: 60%;
-  padding: 12px;
-  font-size: 16px;
-  font-family: Arial, sans-serif;
-  color: #333;
-  background-color: #f0f0f0;
-  border: none;
-  border-radius: 4px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  resize: none;
-  transition: box-shadow 0.2s ease-in-out;
-}
-
-textarea:focus {
-  outline: none;
-  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
-}
+@import './layout/appLayout';
+@import './layout/sideMenu';
+@import './layout/dashboard';
+@import './layout/iconUpload';

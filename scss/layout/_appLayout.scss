@@ -1,0 +1,6 @@
+body {
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+  gap: 3rem;
+  background-color: $lavender;
+}

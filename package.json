@@ -6,12 +6,31 @@
   "scripts": {
     "start": "electron .",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build-css": "node-sass scss/main.scss style.css"
+    "build-css": "node-sass scss/main.scss style.css",
+    "build": "electron-builder"
+  },
+  "build": {
+    "appId": "com.electron.new-games-app",
+    "productName": "Icon Solution",
+    "directories": {
+      "output": "dist"
+    },
+    "mac": {
+      "category": "public.app-category.utilities",
+      "target": "dmg"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "linux": {
+      "target": "AppImage"
+    }
   },
   "author": "Goran Kolar",
   "license": "ISC",
   "devDependencies": {
     "electron": "^24.2.0",
+    "electron-builder": "^23.6.0",
     "electron-reload": "^2.0.0-alpha.1",
     "node-sass": "^9.0.0"
   }

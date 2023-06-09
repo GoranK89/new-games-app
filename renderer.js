@@ -41,8 +41,15 @@ btnCreateFolder.addEventListener('click', () => {
   window.electronAPI.storeGameCodes(gameCodes);
   window.electronAPI.createFolders();
   folderNameInput.value = '';
+
+  btnPasteIcons.classList.remove('btn-disabled');
+  btnPasteIcons.classList.add('btn-yellow');
 });
 
 btnPasteIcons.addEventListener('click', () => {
+  if (btnPasteIcons.classList.contains('btn-disabled')) return;
   window.electronAPI.pasteIcons();
+
+  btnPasteIcons.classList.remove('btn-yellow');
+  btnPasteIcons.classList.add('btn-disabled');
 });

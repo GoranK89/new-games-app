@@ -24,6 +24,7 @@
         <div class="stat-box">Folders Created</div>
         <div class="stat-box">Links Written</div>
         <div class="stat-box">Time Saved</div>
+        <div class="stat-box">Folder sizes</div>
       </div>
     </section>
     <section id="game-codes-section" class="hidden">
@@ -41,25 +42,29 @@
       <button class="btn-green">Generate game Codes</button>
     </section>
     <section id="game-folders-section" class="hidden">
-      <h2>Create folders and links</h2>
-      <p>Creates all necessary folders, sub-folders and icons.txt.</p>
-      <p>
-        If the game name had any other characters than text or numbers (' : "
-        -), it has to be manually added in the game_en.ini (for now).
-      </p>
-      <textarea
-        id="input-folder-names"
-        rows="5"
-        cols="30"
-        type="text"
-        placeholder="Enter game codes, one code per line"
-      ></textarea>
-      <button id="btn-create-folder" class="btn-green">Prepare upload</button>
-      <p>
-        Finds unzipped matching icons based on their folder name and pastes them
-        in the relevant folders
-      </p>
-      <button id="btn-paste-icons" class="btn-yellow">Paste icons</button>
+      <div class="section-header">
+        <h2 class="section-header__title">Create folders and links</h2>
+        <p class="section-header__text">
+          Paste all game codes in the text area below, one code per line. All
+          necessary folders and links will be created automatically. In
+          game_en.ini the content and title are generated from the game code, if
+          the game name has symbols like ",': etc. they will not be included.
+        </p>
+      </div>
+      <div class="input-container">
+        <textarea
+          id="input-folder-names"
+          rows="5"
+          cols="30"
+          type="text"
+          placeholder="Enter game codes, one code per line"
+        ></textarea>
+        <button id="btn-create-folder" class="btn-green">Prepare upload</button>
+        <button id="btn-paste-icons" class="btn-disabled">Paste icons</button>
+      </div>
+      <div class="output-container">
+        <p>some text will be generated here</p>
+      </div>
     </section>
     <section id="upload-check-section" class="hidden">
       <ul>

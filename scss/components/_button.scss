@@ -1,3 +1,15 @@
+.btn-disabled {
+  @include button($gray-blue, $white);
+  cursor: not-allowed;
+  &:hover {
+    background-color: $gray-blue;
+  }
+
+  &:active {
+    top: 0;
+  }
+}
+
 .btn-green {
   @include button($green, $white);
 }
