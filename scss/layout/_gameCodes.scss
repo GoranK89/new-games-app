@@ -1,9 +1,32 @@
-#game-folders-section {
+#game-codes-section {
   display: grid;
   grid-template-columns: 4fr 3fr;
   gap: 4rem;
   margin-top: 3rem;
   margin-right: 2rem;
+
+  select {
+    cursor: pointer;
+    display: block;
+    width: 100%;
+    padding: 12px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 1.6rem;
+    border: none;
+    resize: none;
+    color: #333;
+    background-color: #e3e0e941;
+    transition: box-shadow 0.2s ease-in-out;
+
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(61, 183, 96, 0.5);
+    }
+
+    &::placeholder {
+      color: #333;
+    }
+  }
 
   textarea {
     display: block;

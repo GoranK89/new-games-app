@@ -7,4 +7,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
     ipcRenderer.invoke('store-game-codes', gameCodes),
 
   pasteIcons: () => ipcRenderer.send('paste-icons'),
+
+  generateIconUrls: () => ipcRenderer.invoke('generate-icon-urls'),
 });

@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>New Games</title>
     <link rel="stylesheet" href="./css/main.min.css" />
+    <script src="./renderer.js" defer></script>
   </head>
   <body>
     <section class="side-menu">
@@ -21,25 +22,48 @@
     </section>
     <section id="dashboard-section">
       <div class="stats-container">
-        <div class="stat-box">Folders Created</div>
-        <div class="stat-box">Links Written</div>
-        <div class="stat-box">Time Saved</div>
-        <div class="stat-box">Folder sizes</div>
+        <div class="stat-box">
+          <span class="stat-box__icon">ICON</span>
+          <div class="stat-box__border"></div>
+          <div class="stat-box__content-wrapper">
+            <p class="stat-box__content-wrapper-text">Total games</p>
+            <span class="stat-box__content-wrapper-stat">276</span>
+          </div>
+        </div>
+        <div class="stat-box">
+          <span class="stat-box__icon">ICON</span>
+          <div class="stat-box__border"></div>
+          <div class="stat-box__content-wrapper">
+            <p class="stat-box__content-wrapper-text">Folders size</p>
+            <span class="stat-box__content-wrapper-stat">1.4mb</span>
+          </div>
+        </div>
       </div>
     </section>
     <section id="game-codes-section" class="hidden">
-      <select>
-        <option value="PP">Pragmatic Play</option>
-        <option value="PP">Evolution</option>
-      </select>
-      <textarea
-        id="input-game-names"
-        rows="5"
-        cols="30"
-        type="text"
-        placeholder="Enter game names, one name per line"
-      ></textarea>
-      <button class="btn-green">Generate game Codes</button>
+      <div class="section-header">
+        <h2 class="section-header__title">Generate game codes</h2>
+        <p class="section-header__text">
+          Game code is based on the game name and the selected game provider.
+        </p>
+      </div>
+      <div class="input-container">
+        <select>
+          <option value="PP">Pragmatic Play</option>
+          <option value="PP">Evolution</option>
+        </select>
+        <textarea
+          id="input-game-names"
+          rows="5"
+          cols="30"
+          type="text"
+          placeholder="Enter game names, one name per line"
+        ></textarea>
+        <button class="btn-green">Generate game Codes</button>
+      </div>
+      <div class="output-container">
+        <p>Game codes:</p>
+      </div>
     </section>
     <section id="game-folders-section" class="hidden">
       <div class="section-header">
@@ -63,14 +87,40 @@
         <button id="btn-paste-icons" class="btn-disabled">Paste icons</button>
       </div>
       <div class="output-container">
-        <p>some text will be generated here</p>
+        <table id="folders-table">
+          <thead>
+            <tr>
+              <th>Folder Name</th>
+              <th>Icons folder</th>
+              <th>Game name</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>PP_GAME</td>
+              <td>empty</td>
+              <td>game</td>
+            </tr>
+            <tr>
+              <td>XX_GAME</td>
+              <td>OK</td>
+              <td>game</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </section>
     <section id="upload-check-section" class="hidden">
-      <ul>
-        <li>generate clickable links based on all stored game codes</li>
-      </ul>
+      <div class="section-header">
+        <h2 class="section-header__title">Generate medialib links</h2>
+        <p class="section-header__text">
+          Generates clickable links based on all game codes that were put in.
+        </p>
+      </div>
+      <button id="btn-create-url" class="btn-green">Create url's</button>
+      <div id="url-output" class="output-container">
+        <p>Links:</p>
+      </div>
     </section>
   </body>
-  <script src="./renderer.js"></script>
 </html>

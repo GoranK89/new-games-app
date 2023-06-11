@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, shell } = require('electron');
 const electronReload = require('electron-reload');
 const path = require('path');
 const fs = require('fs');
@@ -61,6 +61,15 @@ function pasteIcons(event) {
   // in the end do a delayed? check if any folders are empty
 }
 
+async function generateIconUrls() {
+  const gameCodes = await readStoredGameCodes(mainPath);
+
+  if (gameCodes) {
+    const iconUrls = gameCodes.map((gameCode) => `http//www.${gameCode}.com`);
+    return iconUrls;
+  }
+}
+
 //////// Electron specific funtionality ////////
 const createWindow = () => {
   const win = new BrowserWindow({
@@ -77,6 +86,7 @@ app.whenReady().then(() => {
   ipcMain.handle('store-game-codes', storeGameCodes);
   ipcMain.on('create-folders', prepareNewUpload);
   ipcMain.on('paste-icons', pasteIcons);
+  ipcMain.handle('generate-icon-urls', generateIconUrls);
   createWindow();
 
   app.on('activate', () => {
