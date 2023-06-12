@@ -61,13 +61,12 @@ function pasteIcons(event) {
   // in the end do a delayed? check if any folders are empty
 }
 
-async function generateIconUrls() {
+async function openIconUrls() {
   const gameCodes = await readStoredGameCodes(mainPath);
-
-  if (gameCodes) {
-    const iconUrls = gameCodes.map((gameCode) => `http//www.${gameCode}.com`);
-    return iconUrls;
-  }
+  const iconUrls = gameCodes.map((gameCode) => `http://www.${gameCode}.com`);
+  iconUrls.forEach((url) => {
+    shell.openExternal(url);
+  });
 }
 
 //////// Electron specific funtionality ////////
@@ -86,7 +85,7 @@ app.whenReady().then(() => {
   ipcMain.handle('store-game-codes', storeGameCodes);
   ipcMain.on('create-folders', prepareNewUpload);
   ipcMain.on('paste-icons', pasteIcons);
-  ipcMain.handle('generate-icon-urls', generateIconUrls);
+  ipcMain.handle('open-icon-urls', openIconUrls);
   createWindow();
 
   app.on('activate', () => {

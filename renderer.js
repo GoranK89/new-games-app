@@ -2,8 +2,6 @@ const btnCreateFolder = document.getElementById('btn-create-folder');
 const btnPasteIcons = document.getElementById('btn-paste-icons');
 const btnCreateUrls = document.getElementById('btn-create-url');
 
-const urlOutput = document.getElementById('url-output');
-
 const folderNameInput = document.getElementById('input-folder-names');
 
 const sideMenu = document.querySelector('.side-menu__list');
@@ -59,9 +57,7 @@ btnPasteIcons.addEventListener('click', () => {
   btnPasteIcons.classList.add('btn-disabled');
 });
 
-// CREATE URLS
-btnCreateUrls.addEventListener('click', async () => {
-  const urls = await window.electronAPI.generateIconUrls();
-  urlOutput.innerHTML = urls.join('<br>');
-  // add another button "open all" to send urls back to main to open them in the default browser?
+// OPEN URLS
+btnCreateUrls.addEventListener('click', () => {
+  window.electronAPI.openIconUrls();
 });
