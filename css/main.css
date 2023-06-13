@@ -172,6 +172,7 @@ body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 2rem;
+  margin-bottom: 5rem;
 }
 #dashboard-section .stats-container .stat-box {
   display: flex;
@@ -203,6 +204,30 @@ body {
 #dashboard-section .stats-container .stat-box__content-wrapper-stat {
   font-size: 2rem;
   font-weight: 600;
+}
+#dashboard-section #folders-table {
+  border-collapse: collapse;
+  width: 100%;
+}
+#dashboard-section #folders-table caption {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+#dashboard-section #folders-table th,
+#dashboard-section #folders-table td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid #e3e0e9;
+}
+#dashboard-section #folders-table th {
+  background-color: #816494;
+  color: #fff;
+}
+#dashboard-section #folders-table tr:nth-child(even) {
+  background-color: #fff;
+}
+#dashboard-section #folders-table tr:nth-child(odd) {
+  background-color: #fdf8ed;
 }
 
 #game-folders-section {

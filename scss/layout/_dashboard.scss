@@ -6,6 +6,7 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 2rem;
+    margin-bottom: 5rem;
 
     .stat-box {
       display: flex;
@@ -47,6 +48,35 @@
           font-weight: 600;
         }
       }
+    }
+  }
+
+  #folders-table {
+    border-collapse: collapse;
+    width: 100%;
+
+    caption {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    th,
+    td {
+      padding: 0.75rem;
+      text-align: left;
+      border-bottom: 1px solid $light-violet;
+    }
+
+    th {
+      background-color: $violet;
+      color: $white;
+    }
+
+    tr:nth-child(even) {
+      background-color: $white;
+    }
+    tr:nth-child(odd) {
+      background-color: $very-light-corn;
     }
   }
 }

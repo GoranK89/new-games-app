@@ -4,6 +4,10 @@ const btnCreateUrls = document.getElementById('btn-create-url');
 
 const folderNameInput = document.getElementById('input-folder-names');
 
+// Table
+const table = document.getElementById('folders-table');
+const tr = document.getElementsByTagName('tr');
+
 const sideMenu = document.querySelector('.side-menu__list');
 const sections = {
   dashboard: document.getElementById('dashboard-section'),
@@ -33,7 +37,7 @@ sideMenu.addEventListener('click', (event) => {
 });
 
 // CREATE FOLDERS
-btnCreateFolder.addEventListener('click', () => {
+btnCreateFolder.addEventListener('click', async () => {
   // if (!folderNameInput.value) return;
   const gameCodes = folderNameInput.value
     .split('\n')
@@ -46,6 +50,8 @@ btnCreateFolder.addEventListener('click', () => {
 
   btnPasteIcons.classList.remove('btn-disabled');
   btnPasteIcons.classList.add('btn-yellow');
+
+  renderGameCodes();
 });
 
 // COPY PASTE ICONS
@@ -61,3 +67,27 @@ btnPasteIcons.addEventListener('click', () => {
 btnCreateUrls.addEventListener('click', () => {
   window.electronAPI.openIconUrls();
 });
+
+const renderGameCodes = async () => {
+  const gameCodesForRendering = await window.electronAPI.renderGameCodes();
+
+  table.innerHTML = `
+    <tr>
+      <th>Folder</th>
+      <th>Icons</th>
+      <th>Game title</th>
+    </tr>
+  `;
+
+  gameCodesForRendering.forEach((gameCode) => {
+    table.innerHTML += `
+        <tr>
+          <td>${gameCode}</td>
+          <td>None</td>
+          <td>Game Name</td>
+        </tr>
+    `;
+  });
+};
+
+renderGameCodes();

@@ -63,17 +63,53 @@ function pasteIcons(event) {
 
 async function openIconUrls() {
   const gameCodes = await readStoredGameCodes(mainPath);
-  const iconUrls = gameCodes.map((gameCode) => `http://www.${gameCode}.com`);
+  const iconUrls = gameCodes.map(
+    (gameCode) =>
+      `http://www.cdn.oryxgaming.com/medialib/${gameCode}/launch/250x157.png`
+  );
   iconUrls.forEach((url) => {
     shell.openExternal(url);
   });
 }
 
+function aggregateData() {
+  // read the game codes file
+  const gameCodes = readStoredGameCodes(mainPath);
+  // get launch folder sizes
+  const getFolderSizes = () => {
+    const content = fs.readdirSync(mainPath);
+  };
+  // folder names array
+  const getFolderNames = () => {
+    const content = fs.readdirSync(mainPath);
+    const foldersOnly = content.filter((item) => {
+      const extension = item.split('.').pop();
+      return extension !== 'json' && extension !== 'txt';
+    });
+    return foldersOnly;
+  };
+  getFolderNames();
+
+  // folder includes icons boolean
+
+  // game title of each folder
+}
+
+// send game codes to renderer
+function sendFolderNames() {
+  const content = fs.readdirSync(mainPath);
+  const foldersOnly = content.filter((item) => {
+    const extension = item.split('.').pop();
+    return extension !== 'json' && extension !== 'txt';
+  });
+  return foldersOnly;
+}
+
 //////// Electron specific funtionality ////////
 const createWindow = () => {
   const win = new BrowserWindow({
-    width: 1000,
-    height: 700,
+    width: 1100,
+    height: 750,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
     },
@@ -86,6 +122,7 @@ app.whenReady().then(() => {
   ipcMain.on('create-folders', prepareNewUpload);
   ipcMain.on('paste-icons', pasteIcons);
   ipcMain.handle('open-icon-urls', openIconUrls);
+  ipcMain.handle('render-game-codes', sendFolderNames);
   createWindow();
 
   app.on('activate', () => {
