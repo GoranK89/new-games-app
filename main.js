@@ -80,15 +80,6 @@ function aggregateData() {
     const content = fs.readdirSync(mainPath);
   };
   // folder names array
-  const getFolderNames = () => {
-    const content = fs.readdirSync(mainPath);
-    const foldersOnly = content.filter((item) => {
-      const extension = item.split('.').pop();
-      return extension !== 'json' && extension !== 'txt';
-    });
-    return foldersOnly;
-  };
-  getFolderNames();
 
   // folder includes icons boolean
 
