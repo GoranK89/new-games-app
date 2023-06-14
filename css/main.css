@@ -209,6 +209,12 @@ body {
   border-collapse: collapse;
   width: 100%;
 }
+#dashboard-section #folders-table .icons-ok {
+  background-color: #c8f9e4;
+}
+#dashboard-section #folders-table .icons-not-ok {
+  background-color: #ffb6b6;
+}
 #dashboard-section #folders-table caption {
   font-size: 2rem;
   margin-bottom: 1rem;

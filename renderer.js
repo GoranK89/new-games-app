@@ -2,6 +2,10 @@ const btnCreateFolder = document.getElementById('btn-create-folder');
 const btnPasteIcons = document.getElementById('btn-paste-icons');
 const btnCreateUrls = document.getElementById('btn-create-url');
 
+const statBoxText = document.querySelectorAll(
+  '.stat-box__content-wrapper-stat'
+);
+
 const folderNameInput = document.getElementById('input-folder-names');
 
 // Table
@@ -51,7 +55,7 @@ btnCreateFolder.addEventListener('click', async () => {
   btnPasteIcons.classList.remove('btn-disabled');
   btnPasteIcons.classList.add('btn-yellow');
 
-  renderGameCodes();
+  renderGameFolderData();
 });
 
 // COPY PASTE ICONS
@@ -68,26 +72,37 @@ btnCreateUrls.addEventListener('click', () => {
   window.electronAPI.openIconUrls();
 });
 
-const renderGameCodes = async () => {
-  const gameCodesForRendering = await window.electronAPI.renderGameCodes();
+const renderGameFolderData = async () => {
+  const gameCodesForRendering =
+    await window.electronAPI.getGameFoldersContent();
+
+  statBoxText[0].textContent = gameCodesForRendering.length;
 
   table.innerHTML = `
     <tr>
       <th>Folder</th>
       <th>Icons</th>
       <th>Game title</th>
+      <th>Game type</th>
     </tr>
   `;
 
-  gameCodesForRendering.forEach((gameCode) => {
+  gameCodesForRendering.forEach((folder) => {
+    const iconColumn = folder.iconExists
+      ? `<td class="icons-ok">Icons OK</td>`
+      : `<td class="icons-not-ok">Icons missing</td>`;
+    const gameTitle = folder.gameEnText[1].split('=').pop();
+    const gameType = folder.gameEnText[0].split('=').pop();
+
     table.innerHTML += `
         <tr>
-          <td>${gameCode}</td>
-          <td>None</td>
-          <td>Game Name</td>
+          <td>${folder.folder}</td>
+          ${iconColumn}
+          <td>${gameTitle}</td>
+          <td>${gameType}</td>
         </tr>
     `;
   });
 };
 
-renderGameCodes();
+renderGameFolderData();

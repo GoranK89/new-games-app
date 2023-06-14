@@ -65,7 +65,7 @@ async function openIconUrls() {
   const gameCodes = await readStoredGameCodes(mainPath);
   const iconUrls = gameCodes.map(
     (gameCode) =>
-      `http://www.cdn.oryxgaming.com/medialib/${gameCode}/launch/250x157.png`
+      `https://cdn.oryxgaming.com/medialib/${gameCode}/launch/250x157.png`
   );
   iconUrls.forEach((url) => {
     shell.openExternal(url);
@@ -86,14 +86,27 @@ function aggregateData() {
   // game title of each folder
 }
 
-// send game codes to renderer
-function sendFolderNames() {
-  const content = fs.readdirSync(mainPath);
-  const foldersOnly = content.filter((item) => {
+// Send game folders content data to renderer
+function getGameFoldersContent() {
+  const mainFolder = fs.readdirSync(mainPath);
+  const foldersOnly = mainFolder.filter((item) => {
     const extension = item.split('.').pop();
     return extension !== 'json' && extension !== 'txt';
   });
-  return foldersOnly;
+
+  const gameFoldersData = foldersOnly.map((folder) => {
+    const launchFolderPath = `${mainPath}/${folder}/launch`;
+    const gameEnPath = `${mainPath}/${folder}/game_en.ini`;
+
+    if (fs.existsSync(launchFolderPath) || gameEnPath) {
+      const launchFolderContent = fs.readdirSync(launchFolderPath);
+      const gameEnText = fs.readFileSync(gameEnPath, 'utf8').split('\n');
+      //TODO: check for all icons
+      const iconExists = launchFolderContent.includes('250x157.png');
+      return { folder, iconExists, gameEnText };
+    }
+  });
+  return gameFoldersData;
 }
 
 //////// Electron specific funtionality ////////
@@ -113,14 +126,14 @@ app.whenReady().then(() => {
   ipcMain.on('create-folders', prepareNewUpload);
   ipcMain.on('paste-icons', pasteIcons);
   ipcMain.handle('open-icon-urls', openIconUrls);
-  ipcMain.handle('render-game-codes', sendFolderNames);
+  ipcMain.handle('game-folders-content', getGameFoldersContent);
   createWindow();
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });
 
-  //NOTE: Development only!
+  // NOTE: Development only!
   require('electron-reload')(__dirname, {
     electron: require(`${__dirname}/node_modules/electron`),
   });

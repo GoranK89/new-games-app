@@ -55,6 +55,13 @@
     border-collapse: collapse;
     width: 100%;
 
+    .icons-ok {
+      background-color: #c8f9e4;
+    }
+    .icons-not-ok {
+      background-color: #ffb6b6;
+    }
+
     caption {
       font-size: 2rem;
       margin-bottom: 1rem;
