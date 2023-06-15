@@ -74,6 +74,13 @@
       border-bottom: 1px solid $light-violet;
     }
 
+    td:not(:nth-child(2)) {
+      &:hover {
+        cursor: pointer;
+        background-color: $light-violet;
+      }
+    }
+
     th {
       background-color: $violet;
       color: $white;

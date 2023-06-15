@@ -11,6 +11,7 @@ const folderNameInput = document.getElementById('input-folder-names');
 // Table
 const table = document.getElementById('folders-table');
 const tr = document.getElementsByTagName('tr');
+const td = document.getElementsByTagName('td');
 
 const sideMenu = document.querySelector('.side-menu__list');
 const sections = {
@@ -103,6 +104,20 @@ const renderGameFolderData = async () => {
         </tr>
     `;
   });
+
+  // experimental code for editing table cells
+  for (let i = 0; i < td.length; i++) {
+    td[i].addEventListener('click', () => {
+      const input = document.createElement('input');
+      input.value = td[i].textContent;
+      td[i].textContent = '';
+      td[i].appendChild(input);
+      input.focus();
+      input.addEventListener('blur', () => {
+        td[i].textContent = input.value;
+      });
+    });
+  }
 };
 
 renderGameFolderData();

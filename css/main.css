@@ -225,6 +225,10 @@ body {
   text-align: left;
   border-bottom: 1px solid #e3e0e9;
 }
+#dashboard-section #folders-table td:not(:nth-child(2)):hover {
+  cursor: pointer;
+  background-color: #e3e0e9;
+}
 #dashboard-section #folders-table th {
   background-color: #816494;
   color: #fff;
