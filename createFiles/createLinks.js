@@ -47,7 +47,7 @@ const createSymlink = (gameCode, existingLinks) => {
   );
 
   const foundGameProvider = matchingGameLink.split('/')[0];
-  const bindTo = matchingGameLink.replace(foundGameProvider, gameProvider); // games[]=GP with GP
+  const bindTo = matchingGameLink.replace(foundGameProvider, gameProvider);
 
   const baseSymlink = `symlinks[]=${gameProvider}/${gameCode},${bindTo}`;
 
@@ -123,7 +123,7 @@ const createLinks = (path, gameCodes) => {
   ///// SORTING the created links //////
   const groupedLinks = [];
 
-  existingLinks.forEach((link) => {
+  existingLinks?.forEach((link) => {
     const gameProvider = link
       .split('/')[0]
       .replace(/(games\[\]=|symlinks\[\]=)/, '');
